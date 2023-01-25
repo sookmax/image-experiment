@@ -1,19 +1,14 @@
 import { urlForImage } from "@/lib/sanity.image";
+import { RandomImage } from "@/lib/sanity.query";
 
 type Props = Omit<JSX.IntrinsicElements["ul"], "children"> & {
-  images: Image[];
+  images: RandomImage[];
   children: (props: {
-    image: Image;
+    image: RandomImage;
     idx: number;
     previewElProps: PreviewElProps;
     imageElProps: ImageElProps;
   }) => React.ReactNode;
-};
-
-type Image = {
-  url: string;
-  preview: string;
-  caption: string;
 };
 
 type PreviewElProps = {
@@ -98,16 +93,16 @@ export default function ImageList({
         };
 
         const imageElProps: ImageElProps = {
-          src: urlForImage(image.url).width(1024).url(),
+          src: urlForImage(image.image).width(1024).url(),
           srcSet: [
-            `${urlForImage(image.url).width(640).url()} 640w`,
-            `${urlForImage(image.url).width(768).url()} 768w`,
-            `${urlForImage(image.url).width(1024).url()} 1024w`,
-            `${urlForImage(image.url).width(1280).url()} 1280w`,
-            `${urlForImage(image.url).width(1536).url()} 1536w`,
-            `${urlForImage(image.url).width(1920).url()} 1920w`,
-            `${urlForImage(image.url).width(2560).url()} 2560w`,
-            `${urlForImage(image.url).width(3840).url()} 3840w`,
+            `${urlForImage(image.image).width(640).url()} 640w`,
+            `${urlForImage(image.image).width(768).url()} 768w`,
+            `${urlForImage(image.image).width(1024).url()} 1024w`,
+            `${urlForImage(image.image).width(1280).url()} 1280w`,
+            `${urlForImage(image.image).width(1536).url()} 1536w`,
+            `${urlForImage(image.image).width(1920).url()} 1920w`,
+            `${urlForImage(image.image).width(2560).url()} 2560w`,
+            `${urlForImage(image.image).width(3840).url()} 3840w`,
           ].join(", "),
           sizes: Array.isArray(sizes)
             ? [...sizes, "100vw"].join(", ")

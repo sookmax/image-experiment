@@ -28,7 +28,7 @@ export default async function Home() {
                   <div {...previewElProps} className="h-full rounded-t-lg" />
                   <Image
                     className="absolute inset-0 w-full h-full object-cover rounded-t-lg"
-                    url={image.url}
+                    image={image.image}
                     alt={image.caption}
                     sizes={imageElProps.sizes}
                     loading={idx < 3 ? "eager" : "lazy"}
