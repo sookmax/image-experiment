@@ -4,6 +4,7 @@ type Props = Omit<JSX.IntrinsicElements["ul"], "children"> & {
   images: Image[];
   children: (props: {
     image: Image;
+    idx: number;
     previewElProps: PreviewElProps;
     imageElProps: ImageElProps;
   }) => React.ReactNode;
@@ -85,7 +86,7 @@ export default function ImageList({
 
   return (
     <ul className={className} {...rest}>
-      {images.map((image) => {
+      {images.map((image, idx) => {
         const previewElProps: PreviewElProps = {
           style: {
             backgroundImage: `url(${image.preview})`,
@@ -113,7 +114,7 @@ export default function ImageList({
             : "100vw",
         };
 
-        return children({ image, previewElProps, imageElProps });
+        return children({ image, idx, previewElProps, imageElProps });
       })}
     </ul>
   );
