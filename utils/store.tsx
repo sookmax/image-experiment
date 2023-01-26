@@ -3,13 +3,15 @@ import React, { useContext, useMemo, useReducer } from "react";
 import produce from "immer";
 
 export interface AppState {
+  images: RandomImage[];
   isViewerOpen: boolean;
-  viewerMainImage: RandomImage | null;
+  currentImageIndex: number;
 }
 
 const initialState: AppState = {
+  images: [],
   isViewerOpen: false,
-  viewerMainImage: null,
+  currentImageIndex: -1,
 };
 
 function reducer(state: AppState, update: (state: AppState) => void) {
@@ -24,11 +26,12 @@ const AppDispatchContext = React.createContext<React.Dispatch<
 > | null>(null);
 
 type Props = {
+  images: RandomImage[];
   children: React.ReactNode;
 };
 
-export function AppContextProvider({ children }: Props) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export function AppContextProvider({ images, children }: Props) {
+  const [state, dispatch] = useReducer(reducer, { ...initialState, images });
   const stateContextValue = useMemo(() => state, [state]);
   const dispatchContextValue = useMemo(() => dispatch, [dispatch]);
 

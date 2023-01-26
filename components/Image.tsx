@@ -12,6 +12,8 @@ export default function Image({ image, alt, sizes, ...rest }: Props) {
       // src is for browsers that don't support srcset
       src={urlForImage(image).width(1024).url()}
       srcSet={[
+        `${urlForImage(image).width(160).url()} 160w`,
+        `${urlForImage(image).width(320).url()} 320w`,
         `${urlForImage(image).width(640).url()} 640w`,
         `${urlForImage(image).width(768).url()} 768w`,
         `${urlForImage(image).width(1024).url()} 1024w`,

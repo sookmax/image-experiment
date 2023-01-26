@@ -8,12 +8,12 @@ import ImageList from "@/components/ImageList";
 const inter = Inter({ subsets: ["latin"] });
 
 export default async function Home() {
-  const data = await getAllRandomImages();
-  // console.log(data);
+  const images = await getAllRandomImages();
+  // console.log(images);
   return (
-    <Main className={inter.className}>
+    <Main className={inter.className} images={images}>
       <ImageList
-        images={data}
+        images={images}
         className="p-4 md:grid md:grid-cols-2 xl:grid-cols-3 space-y-6 md:space-y-0 md:gap-6"
       >
         {({ image, idx, previewElProps, imageElProps }) => {

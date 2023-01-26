@@ -113,7 +113,7 @@ export default function ImageList({
         };
 
         return (
-          <ImageViewerOpener key={image.url} image={image}>
+          <ImageViewerOpener key={image.url} imageIndex={idx}>
             {children({ image, idx, previewElProps, imageElProps })}
           </ImageViewerOpener>
         );

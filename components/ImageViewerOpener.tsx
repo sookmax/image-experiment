@@ -5,10 +5,10 @@ import { useAppDispatch } from "@/utils/store";
 import El from "./El";
 
 type Props = JSX.IntrinsicElements["li"] & {
-  image: RandomImage;
+  imageIndex: number;
 };
 
-export default function ImageViewerOpener({ image, ...rest }: Props) {
+export default function ImageViewerOpener({ imageIndex, ...rest }: Props) {
   const dispatch = useAppDispatch();
 
   return (
@@ -18,7 +18,7 @@ export default function ImageViewerOpener({ image, ...rest }: Props) {
       onClick={() =>
         dispatch((state) => {
           state.isViewerOpen = true;
-          state.viewerMainImage = image;
+          state.currentImageIndex = imageIndex;
         })
       }
     />

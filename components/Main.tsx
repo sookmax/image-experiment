@@ -1,14 +1,17 @@
 "use client";
 
+import { RandomImage } from "@/lib/sanity.query";
 import { AppContextProvider } from "@/utils/store";
 import ImageViewer from "./ImageViewer";
 
-type Props = JSX.IntrinsicElements["main"];
+type Props = JSX.IntrinsicElements["main"] & {
+  images: RandomImage[];
+};
 
-export default function Main(props: Props) {
+export default function Main({ images, ...rest }: Props) {
   return (
-    <AppContextProvider>
-      <main {...props} />
+    <AppContextProvider images={images}>
+      <main {...rest} />
       <ImageViewer />
     </AppContextProvider>
   );
