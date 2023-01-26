@@ -1,5 +1,6 @@
 import { urlForImage } from "@/lib/sanity.image";
 import { RandomImage } from "@/lib/sanity.query";
+import ImageViewerOpener from "./ImageViewerOpener";
 
 type Props = Omit<JSX.IntrinsicElements["ul"], "children"> & {
   images: RandomImage[];
@@ -10,6 +11,8 @@ type Props = Omit<JSX.IntrinsicElements["ul"], "children"> & {
     imageElProps: ImageElProps;
   }) => React.ReactNode;
 };
+
+export type ImageListProps = Props;
 
 type PreviewElProps = {
   style: React.CSSProperties;
@@ -109,7 +112,11 @@ export default function ImageList({
             : "100vw",
         };
 
-        return children({ image, idx, previewElProps, imageElProps });
+        return (
+          <ImageViewerOpener key={image.url} image={image}>
+            {children({ image, idx, previewElProps, imageElProps })}
+          </ImageViewerOpener>
+        );
       })}
     </ul>
   );
