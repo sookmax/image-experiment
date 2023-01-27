@@ -2,24 +2,39 @@
 
 import { useAppDispatch } from "@/utils/store";
 import Slot from "@/components/Slot";
+import { RandomImage } from "@/lib/sanity.query";
 
-type Props = JSX.IntrinsicElements["li"] & {
-  imageIndex: number;
+type Props = {
+  imageOrIndex: number | RandomImage;
+  as?: string;
+  children?: React.ReactNode;
 };
 
-export default function ImageViewerOpener({ imageIndex, ...rest }: Props) {
+export default function ImageViewerOpener({
+  imageOrIndex,
+  as = "div",
+  children,
+}: Props) {
   const dispatch = useAppDispatch();
 
   return (
     <Slot
-      as="li"
-      {...rest}
+      as={as}
+      className="cursor-zoom-in"
       onClick={() =>
         dispatch((state) => {
           state.isViewerOpen = true;
-          state.currentImageIndex = imageIndex;
+          if (typeof imageOrIndex === "number") {
+            state.currentImageIndex = imageOrIndex;
+          } else {
+            state.currentImageIndex = state.images.findIndex(
+              (image) => image.url === imageOrIndex.url
+            );
+          }
         })
       }
-    />
+    >
+      {children}
+    </Slot>
   );
 }

@@ -21,3 +21,26 @@ export type RandomImage = {
   aspectRatio: number;
   caption: string;
 };
+
+export const articleQuery = groq`
+*[_type == "article"][0]{
+  ...,
+  content[]{
+    ...,
+    _type == 'randomImage' => @->{
+      image,
+      ...(image.asset -> {
+        url,
+        "preview": metadata.lqip,
+        "aspectRatio": metadata.dimensions.aspectRatio
+      }),
+      "caption": image.caption
+    }
+  }
+}
+`;
+
+export type Article = {
+  title: string;
+  content: (any | RandomImage)[];
+};
