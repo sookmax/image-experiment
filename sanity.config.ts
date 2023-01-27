@@ -1,10 +1,7 @@
 import { defineConfig } from "sanity";
 import { deskTool } from "sanity/desk";
 import { visionTool } from "@sanity/vision";
-import {
-  unsplashImageAsset,
-  unsplashAssetSource,
-} from "sanity-plugin-asset-source-unsplash";
+import { unsplashImageAsset } from "sanity-plugin-asset-source-unsplash";
 import {
   SANITY_PROJECT_ID,
   SANITY_PROJECT_TITLE,

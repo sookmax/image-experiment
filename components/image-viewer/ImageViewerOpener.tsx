@@ -1,8 +1,7 @@
 "use client";
 
-import { RandomImage } from "@/lib/sanity.query";
 import { useAppDispatch } from "@/utils/store";
-import El from "./El";
+import Slot from "@/components/Slot";
 
 type Props = JSX.IntrinsicElements["li"] & {
   imageIndex: number;
@@ -12,7 +11,7 @@ export default function ImageViewerOpener({ imageIndex, ...rest }: Props) {
   const dispatch = useAppDispatch();
 
   return (
-    <El
+    <Slot
       as="li"
       {...rest}
       onClick={() =>

@@ -1,17 +1,14 @@
 import Main from "@/components/Main";
 import { getAllRandomImages } from "@/lib/sanity.client";
 import Image from "@/components/Image";
-import { Inter } from "@next/font/google";
 import { classNames } from "@/utils";
 import ImageList from "@/components/ImageList";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default async function Home() {
   const images = await getAllRandomImages();
   // console.log(images);
   return (
-    <Main className={inter.className} images={images}>
+    <Main images={images}>
       <ImageList
         images={images}
         className="p-4 md:grid md:grid-cols-2 xl:grid-cols-3 space-y-6 md:space-y-0 md:gap-6"

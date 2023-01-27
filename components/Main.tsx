@@ -2,7 +2,7 @@
 
 import { RandomImage } from "@/lib/sanity.query";
 import { AppContextProvider } from "@/utils/store";
-import ImageViewer from "./ImageViewer";
+import ImageViewer from "./image-viewer/ImageViewer";
 
 type Props = JSX.IntrinsicElements["main"] & {
   images: RandomImage[];

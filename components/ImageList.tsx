@@ -1,6 +1,6 @@
 import { urlForImage } from "@/lib/sanity.image";
 import { RandomImage } from "@/lib/sanity.query";
-import ImageViewerOpener from "./ImageViewerOpener";
+import ImageViewerOpener from "./image-viewer/ImageViewerOpener";
 
 type Props = Omit<JSX.IntrinsicElements["ul"], "children"> & {
   images: RandomImage[];

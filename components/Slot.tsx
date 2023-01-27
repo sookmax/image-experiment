@@ -6,7 +6,7 @@ type PropsOf<TagName> = TagName extends keyof JSX.IntrinsicElements
 
 type Props<TagName extends string> = { as?: TagName } & PropsOf<TagName>;
 
-export default function El<TagName extends string>({
+export default function Slot<TagName extends string>({
   as,
   ...props
 }: Props<TagName>) {
