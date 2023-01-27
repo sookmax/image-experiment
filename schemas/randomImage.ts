@@ -12,7 +12,7 @@ export default defineType({
       title: "Image",
       fields: [
         defineField({
-          type: "string",
+          type: "text",
           name: "caption",
           title: "Caption",
           initialValue:

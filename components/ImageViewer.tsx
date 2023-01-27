@@ -21,6 +21,7 @@ export default function ImageViewer() {
   const [previewEl, setPreviewEl] = useState<HTMLDivElement | null>(null);
   const [thumbnailListEl, setThumbnailListEl] =
     useState<HTMLUListElement | null>(null);
+  const [captionEl, setCaptionEl] = useState<HTMLDivElement | null>(null);
 
   let aspectRatioAfterCrop = currentImage.aspectRatio;
 
@@ -33,11 +34,23 @@ export default function ImageViewer() {
   }
 
   useEffect(() => {
-    if (imageContainer && previewEl && aspectRatioAfterCrop) {
+    if (imageContainer && previewEl && captionEl && aspectRatioAfterCrop) {
+      imageContainer.style.paddingBottom = `${
+        captionEl.getBoundingClientRect().height
+      }px`;
       const { width, height } = imageContainer.getBoundingClientRect();
-      const containerAspectRatio = width / height;
+      const computedStyle = window.getComputedStyle(imageContainer);
+      const paddingTop = parseInt(
+        computedStyle.getPropertyValue("padding-top").replace("px", ""),
+        10
+      );
+      const paddingBottom = parseInt(
+        computedStyle.getPropertyValue("padding-bottom").replace("px", ""),
+        10
+      );
 
-      // console.log(containerAspectRatio, aspectRatioAfterCrop);
+      const containerAspectRatio =
+        width / (height - paddingTop - paddingBottom);
 
       if (aspectRatioAfterCrop > containerAspectRatio) {
         previewEl.style.width = "100%";
@@ -47,7 +60,7 @@ export default function ImageViewer() {
         previewEl.style.height = "100%";
       }
     }
-  }, [previewEl, imageContainer, aspectRatioAfterCrop]);
+  }, [previewEl, captionEl, imageContainer, aspectRatioAfterCrop]);
 
   useEffect(() => {
     if (thumbnailListEl) {
@@ -90,8 +103,8 @@ export default function ImageViewer() {
                 aspect ratio
               </Dialog.Description>
             </VisuallyHidden.Root>
-            <div className="flex flex-col text-white h-full">
-              <div className="flex-shrink-0 flex items-center justify-end p-3">
+            <div className="flex flex-col text-white h-full relative">
+              <div className="absolute top-0 right-0 p-3 z-10">
                 <Dialog.Close
                   className={classNames(
                     "w-8 h-8",
@@ -102,7 +115,7 @@ export default function ImageViewer() {
                 </Dialog.Close>
               </div>
               <div
-                className="flex-grow flex flex-col items-center justify-center relative"
+                className="flex-grow flex justify-center items-center relative pt-10"
                 ref={setImageContainer}
               >
                 <div
@@ -123,48 +136,58 @@ export default function ImageViewer() {
                     image={currentImage.image}
                     alt={currentImage.caption}
                   />
-                  <div className="absolute top-1/2 -translate-y-1/2 right-0">
-                    <button
-                      className={classNames(
-                        "w-10 h-10 text-white m-2",
-                        "rounded-md focus:outline-none focus:ring-offset-2 focus:ring-1 focus:ring-offset-transparent"
-                      )}
-                      onClick={() => {
-                        dispatch((state) => {
-                          let nextImageIndex = state.currentImageIndex + 1;
-                          if (nextImageIndex >= state.images.length) {
-                            nextImageIndex = 0;
-                          }
-                          state.currentImageIndex = nextImageIndex;
-                        });
-                      }}
-                    >
-                      <ChevronRightIcon />
-                    </button>
-                  </div>
-                  <div className="absolute top-1/2 -translate-y-1/2 left-0">
-                    <button
-                      className={classNames(
-                        "w-10 h-10 text-white m-2",
-                        "rounded-md focus:outline-none focus:ring-offset-2 focus:ring-1 focus:ring-offset-transparent"
-                      )}
-                      onClick={() => {
-                        dispatch((state) => {
-                          let nextImageIndex = state.currentImageIndex - 1;
-                          if (nextImageIndex < 0) {
-                            nextImageIndex = state.images.length - 1;
-                          }
-                          state.currentImageIndex = nextImageIndex;
-                        });
-                      }}
-                    >
-                      <ChevronLeftIcon />
-                    </button>
+                  <div
+                    ref={setCaptionEl}
+                    className={classNames(
+                      "absolute top-full left-1/2 -translate-x-1/2 w-full",
+                      "py-3 px-2 sm:px-0"
+                    )}
+                  >
+                    <p className="line-clamp-5 sm:line-clamp-2">
+                      {currentImage.caption}
+                    </p>
                   </div>
                 </div>
-                <div className="text-center p-4">{currentImage.caption}</div>
+                <div className="absolute top-1/2 -translate-y-1/2 right-0 mx-2">
+                  <button
+                    className={classNames(
+                      "w-10 h-10 text-white",
+                      "rounded-md focus:outline-none focus:ring-offset-2 focus:ring-1 focus:ring-offset-transparent"
+                    )}
+                    onClick={() => {
+                      dispatch((state) => {
+                        let nextImageIndex = state.currentImageIndex + 1;
+                        if (nextImageIndex >= state.images.length) {
+                          nextImageIndex = 0;
+                        }
+                        state.currentImageIndex = nextImageIndex;
+                      });
+                    }}
+                  >
+                    <ChevronRightIcon />
+                  </button>
+                </div>
+                <div className="absolute top-1/2 -translate-y-1/2 left-0 mx-2">
+                  <button
+                    className={classNames(
+                      "w-10 h-10 text-white",
+                      "rounded-md focus:outline-none focus:ring-offset-2 focus:ring-1 focus:ring-offset-transparent"
+                    )}
+                    onClick={() => {
+                      dispatch((state) => {
+                        let nextImageIndex = state.currentImageIndex - 1;
+                        if (nextImageIndex < 0) {
+                          nextImageIndex = state.images.length - 1;
+                        }
+                        state.currentImageIndex = nextImageIndex;
+                      });
+                    }}
+                  >
+                    <ChevronLeftIcon />
+                  </button>
+                </div>
               </div>
-              <div className="flex-shrink-0 h-32 p-4 mb-3 sm:mb-0">
+              <div className="flex-shrink-0 p-4 mb-3 sm:mb-0 h-24 mt-3">
                 <ul
                   className="flex h-full space-x-2 overflow-auto"
                   ref={setThumbnailListEl}
@@ -175,7 +198,7 @@ export default function ImageViewer() {
                       <li
                         key={image.url}
                         className={classNames(
-                          "w-32 flex-shrink-0",
+                          "flex-shrink-0 w-24",
                           "cursor-pointer",
                           isActive
                             ? "border-2 border-white"
