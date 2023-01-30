@@ -8,6 +8,7 @@ import { getArticle } from "@/lib/sanity.client";
 import Image from "@/components/Image";
 import { RandomImage } from "@/lib/sanity.query";
 import ImageViewerOpener from "@/components/image-viewer/ImageViewerOpener";
+import GithubIcon from "@/components/icons/GithubIcon";
 import { getAspectRatioAfterCrop } from "@/lib/sanity.image";
 
 const portableTextComponents: PortableTextComponents = {
@@ -17,7 +18,7 @@ const portableTextComponents: PortableTextComponents = {
       index,
     }: PortableTextTypeComponentProps<RandomImage>) => {
       // console.log(index);
-      const { preview, image, caption } = value;
+      const { preview, loading, image, caption } = value;
 
       const aspectRatioAfterCrop = getAspectRatioAfterCrop(value);
 
@@ -35,7 +36,13 @@ const portableTextComponents: PortableTextComponents = {
                 paddingBottom: `${(1 / aspectRatioAfterCrop) * 100}%`,
               }}
             >
-              <Image className="absolute inset-0" image={image} alt={caption} />
+              <Image
+                className="absolute inset-0"
+                image={image}
+                alt={caption}
+                loading={loading}
+                sizes="(min-width: 896px) 896px, 100vw"
+              />
             </div>
             <figcaption className="text-sm text-gray-400 p-1">
               {caption}
@@ -89,7 +96,17 @@ export default async function Home() {
   // console.log(article);
   // console.log(images);
   return (
-    <Main images={images} className="max-w-4xl p-4">
+    <Main images={images} className="max-w-4xl p-4 relative">
+      <div className="flex justify-end">
+        <a
+          className="w-8 h-8"
+          href="https://github.com/sookmax/image-experiment"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <GithubIcon />
+        </a>
+      </div>
       <h1 className="font-bold text-4xl my-6">{article.title}</h1>
       <div className={"space-y-2"}>
         <PortableText

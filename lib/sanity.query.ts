@@ -20,6 +20,7 @@ export type RandomImage = {
   preview: string;
   aspectRatio: number;
   caption: string;
+  loading: "eager" | "lazy";
 };
 
 export const articleQuery = groq`
@@ -34,7 +35,8 @@ export const articleQuery = groq`
         "preview": metadata.lqip,
         "aspectRatio": metadata.dimensions.aspectRatio
       }),
-      "caption": image.caption
+      "caption": image.caption,
+      "loading": image.loading
     }
   }
 }

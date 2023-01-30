@@ -54,6 +54,7 @@ export default function ThumbnailList() {
                 className="absolute inset-0 w-full h-full object-cover"
                 image={image.image}
                 alt={image.caption}
+                sizes="100px"
               />
             </div>
           </li>
