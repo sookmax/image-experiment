@@ -8,6 +8,7 @@ import { getArticle } from "@/lib/sanity.client";
 import Image from "@/components/Image";
 import { RandomImage } from "@/lib/sanity.query";
 import ImageViewerOpener from "@/components/image-viewer/ImageViewerOpener";
+import { getAspectRatioAfterCrop } from "@/lib/sanity.image";
 
 const portableTextComponents: PortableTextComponents = {
   types: {
@@ -16,19 +17,22 @@ const portableTextComponents: PortableTextComponents = {
       index,
     }: PortableTextTypeComponentProps<RandomImage>) => {
       // console.log(index);
-      const { preview, aspectRatio, image, caption } = value;
+      const { preview, image, caption } = value;
+
+      const aspectRatioAfterCrop = getAspectRatioAfterCrop(value);
+
       return (
         <ImageViewerOpener as="div" imageOrIndex={value}>
-          <figure>
+          <figure className="my-4">
             <div
-              className="relative border border-gray-800"
+              className="relative"
               style={{
                 backgroundImage: `url(${preview})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 imageRendering: "pixelated",
-                paddingBottom: `${(1 / aspectRatio) * 100}%`,
+                paddingBottom: `${(1 / aspectRatioAfterCrop) * 100}%`,
               }}
             >
               <Image className="absolute inset-0" image={image} alt={caption} />
@@ -41,6 +45,40 @@ const portableTextComponents: PortableTextComponents = {
       );
     },
   },
+  marks: {
+    code: ({ children }) => (
+      <code className="bg-gray-700 p-1 rounded-md">{children}</code>
+    ),
+    link: ({ children, value }) => {
+      const target = (value.href || "").startsWith("http")
+        ? "_blank"
+        : undefined;
+      return (
+        <a
+          href={value.href}
+          target={target}
+          rel={target === "_blank" ? "noindex nofollow" : undefined}
+          className="text-pink-200 underline"
+        >
+          {children}
+        </a>
+      );
+    },
+  },
+  block: {
+    normal: ({ children }) => {
+      // console.log(children);
+      if (
+        Array.isArray(children) &&
+        children.length === 1 &&
+        children.join("") === ""
+      ) {
+        return <p className="pt-3">{children}</p>;
+      } else {
+        return <p>{children}</p>;
+      }
+    },
+  },
 };
 
 export default async function Home() {
@@ -51,9 +89,9 @@ export default async function Home() {
   // console.log(article);
   // console.log(images);
   return (
-    <Main images={images} className="max-w-5xl p-4">
+    <Main images={images} className="max-w-4xl p-4">
       <h1 className="font-bold text-4xl my-6">{article.title}</h1>
-      <div className="space-y-3">
+      <div className={"space-y-2"}>
         <PortableText
           value={article.content}
           components={portableTextComponents}

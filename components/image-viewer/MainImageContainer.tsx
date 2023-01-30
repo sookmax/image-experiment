@@ -1,17 +1,19 @@
-import { urlForImage } from "@/lib/sanity.image";
+"use client";
+
+import { getAspectRatioAfterCrop } from "@/lib/sanity.image";
 import { classNames } from "@/utils";
 import { useAppState } from "@/utils/store";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "../Image";
 
 type Props = {
+  containerAspectRatio: number | null;
   children?: React.ReactNode;
 };
 
-export default function MainImage({ children }: Props) {
+export default function MainImage({ children, containerAspectRatio }: Props) {
   const { images, currentImageIndex } = useAppState();
 
-  const [rootContainer, setRootContainer] = useState<HTMLDivElement | null>();
   const [imageContainer, setImageContainer] = useState<HTMLDivElement | null>();
   const [captionContainer, setCaptionContainer] =
     useState<HTMLDivElement | null>();
@@ -21,44 +23,18 @@ export default function MainImage({ children }: Props) {
     [images, currentImageIndex]
   );
 
-  const aspectRatioAfterCrop = useMemo(() => {
-    let aspect = currentImage.aspectRatio;
-
-    const imageUrl = new URL(urlForImage(currentImage.image).url());
-
-    if (imageUrl.searchParams.has("rect")) {
-      const rect = imageUrl.searchParams.get("rect") as string;
-      const [, , w, h] = rect.split(",").map((n) => parseInt(n, 10));
-      aspect = w / h;
-    }
-
-    return aspect;
-  }, [currentImage]);
+  const aspectRatioAfterCrop = useMemo(
+    () => getAspectRatioAfterCrop(currentImage),
+    [currentImage]
+  );
 
   useEffect(() => {
     if (
-      rootContainer &&
+      containerAspectRatio &&
       imageContainer &&
       captionContainer &&
       aspectRatioAfterCrop
     ) {
-      rootContainer.style.paddingBottom = `${
-        captionContainer.getBoundingClientRect().height
-      }px`;
-      const { width, height } = rootContainer.getBoundingClientRect();
-      const computedStyle = window.getComputedStyle(rootContainer);
-      const paddingTop = parseInt(
-        computedStyle.getPropertyValue("padding-top").replace("px", ""),
-        10
-      );
-      const paddingBottom = parseInt(
-        computedStyle.getPropertyValue("padding-bottom").replace("px", ""),
-        10
-      );
-
-      const containerAspectRatio =
-        width / (height - paddingTop - paddingBottom);
-
       if (aspectRatioAfterCrop > containerAspectRatio) {
         imageContainer.style.width = "100%";
         imageContainer.style.height = "auto";
@@ -66,14 +42,20 @@ export default function MainImage({ children }: Props) {
         imageContainer.style.width = "auto";
         imageContainer.style.height = "100%";
       }
+
+      captionContainer.style.maxWidth = window
+        .getComputedStyle(imageContainer)
+        .getPropertyValue("width");
     }
-  }, [rootContainer, imageContainer, captionContainer, aspectRatioAfterCrop]);
+  }, [
+    imageContainer,
+    captionContainer,
+    aspectRatioAfterCrop,
+    containerAspectRatio,
+  ]);
 
   return (
-    <div
-      className="flex-grow flex justify-center items-center relative pt-10"
-      ref={setRootContainer}
-    >
+    <div className="w-full h-full flex flex-col justify-center items-center relative">
       <div
         className="relative"
         ref={setImageContainer}
@@ -92,15 +74,12 @@ export default function MainImage({ children }: Props) {
           image={currentImage.image}
           alt={currentImage.caption}
         />
-        <div
-          ref={setCaptionContainer}
-          className={classNames(
-            "absolute top-full left-1/2 -translate-x-1/2 w-full",
-            "py-3 px-2 sm:px-0"
-          )}
-        >
-          <p className="line-clamp-5 sm:line-clamp-2">{currentImage.caption}</p>
-        </div>
+      </div>
+      <div
+        ref={setCaptionContainer}
+        className={classNames("px-4 sm:px-0 mt-4")}
+      >
+        <p className="line-clamp-5 sm:line-clamp-2">{currentImage.caption}</p>
       </div>
       {children}
     </div>
