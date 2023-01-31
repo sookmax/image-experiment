@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@next/font': 13.1.2
   '@portabletext/react': ^2.0.0
+  '@portabletext/types': ^2.0.2
   '@radix-ui/react-dialog': 1.0.2
   '@radix-ui/react-visually-hidden': 1.0.1
   '@sanity/icons': ^2
@@ -33,6 +34,7 @@ specifiers:
 dependencies:
   '@next/font': 13.1.2
   '@portabletext/react': 2.0.0_react@18.2.0
+  '@portabletext/types': 2.0.2
   '@radix-ui/react-dialog': 1.0.2_ib3m5ricvtkl2cll7qpr2f6lvq
   '@radix-ui/react-visually-hidden': 1.0.1_biqbaboplfbrettd7655fr4n2y
   '@sanity/icons': 2.2.2_react@18.2.0
@@ -1044,7 +1046,7 @@ packages:
       react: ^17 || ^18
     dependencies:
       '@portabletext/toolkit': 2.0.0
-      '@portabletext/types': 2.0.0
+      '@portabletext/types': 2.0.2
       react: 18.2.0
     dev: false
 
@@ -1058,7 +1060,7 @@ packages:
     resolution: {integrity: sha512-2Ljk7dnofxqam9u4B0h1UmpU18h+6SerSU/UanEHQW/IfjmOi48qZDre6MsOrQJ9/LsmlA8MDrmlCND5r/tg3A==}
     engines: {node: ^14.13.1 || >=16.0.0}
     dependencies:
-      '@portabletext/types': 2.0.0
+      '@portabletext/types': 2.0.2
     dev: false
 
   /@portabletext/types/1.0.3:
@@ -1066,8 +1068,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: false
 
-  /@portabletext/types/2.0.0:
-    resolution: {integrity: sha512-AjbCPt9x9U0XFwLuVnIxweBrDAlKKcPJRVkpckjMk77VKEQoYvX2dITf5QtQf1TlLIx8zHJFtMcLmiqDJiGuLg==}
+  /@portabletext/types/2.0.2:
+    resolution: {integrity: sha512-3xTbSa80G1nODyACY0ilrmPo1PmU1xuoPvfcpzpqSEL0kX01fSW+21PKgS9BcG+GqdG9HK/VxciKWa+nFA7mqg==}
     engines: {node: ^14.13.1 || >=16.0.0 || >=18.0.0}
     dev: false
 

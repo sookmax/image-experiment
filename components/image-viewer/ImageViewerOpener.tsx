@@ -1,40 +1,34 @@
 "use client";
 
+import { classNames } from "@/utils";
 import { useAppDispatch } from "@/utils/store";
-import Slot from "@/components/Slot";
-import { RandomImage } from "@/lib/sanity.query";
+import React, { useCallback } from "react";
+import Slot, { SlotProps } from "../Slot";
 
-type Props = {
-  imageOrIndex: number | RandomImage;
-  as?: string;
-  children?: React.ReactNode;
-};
+type Props<TagName extends string> = {
+  imageUrl: string;
+} & Omit<SlotProps<TagName>, "onClick">;
 
-export default function ImageViewerOpener({
-  imageOrIndex,
-  as = "div",
-  children,
-}: Props) {
+export default function ImageViewerOpener<TagName extends string>({
+  imageUrl,
+  className,
+  ...rest
+}: Props<TagName>) {
   const dispatch = useAppDispatch();
+  const onClick = useCallback(() => {
+    dispatch((state) => {
+      state.isViewerOpen = true;
+      state.currentImageIndex = state.images.findIndex(
+        (image) => image.url === imageUrl
+      );
+    });
+  }, [dispatch, imageUrl]);
 
   return (
     <Slot
-      as={as}
-      className="cursor-zoom-in"
-      onClick={() =>
-        dispatch((state) => {
-          state.isViewerOpen = true;
-          if (typeof imageOrIndex === "number") {
-            state.currentImageIndex = imageOrIndex;
-          } else {
-            state.currentImageIndex = state.images.findIndex(
-              (image) => image.url === imageOrIndex.url
-            );
-          }
-        })
-      }
-    >
-      {children}
-    </Slot>
+      className={classNames(className, "cursor-zoom-in")}
+      onClick={onClick}
+      {...rest}
+    />
   );
 }

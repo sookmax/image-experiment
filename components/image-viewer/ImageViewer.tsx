@@ -61,6 +61,10 @@ export default function ImageViewer() {
               </Dialog.Description>
             </VisuallyHidden.Root>
             <div className="flex flex-col text-white h-full max-h-full relative">
+              {/* Place the close button here so it gets the focus first when opened */}
+              <div className="absolute top-0 right-0 p-3 z-10">
+                <CloseButton />
+              </div>
               {/* flex-grow was causing too many problems so I adopted a different solution */}
               <div ref={setMainImageBox} className="py-4">
                 <MainImageContainer containerAspectRatio={mainImageBoxRatio}>
@@ -77,9 +81,6 @@ export default function ImageViewer() {
                 className="flex-shrink-0 p-4 mb-3 sm:mb-0 h-24 mt-3"
               >
                 <ThumbnailList />
-              </div>
-              <div className="absolute top-0 right-0 p-3 z-10">
-                <CloseButton />
               </div>
             </div>
           </Dialog.Content>
