@@ -8,17 +8,38 @@ import NextImageButton from "./NextImageButton";
 import PrevImageButton from "./PrevImageButton";
 import CloseButton from "./CloseButton";
 import MainImageContainer from "./MainImageContainer";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 export default function ImageViewer() {
   const { isViewerOpen } = useAppState();
   const dispatch = useAppDispatch();
 
+  return <Memoized isOpen={isViewerOpen} dispatch={dispatch} />;
+}
+
+type Props = {
+  isOpen: boolean;
+  dispatch: ReturnType<typeof useAppDispatch>;
+};
+
+const Memoized = React.memo(function ImageViewerImpl({
+  isOpen,
+  dispatch,
+}: Props) {
   const [mainImageBox, setMainImageBox] = useState<HTMLDivElement | null>(null);
   const [mainImageBoxRatio, setMainImageBoxRatio] = useState<number | null>(
     null
   );
   const [thumbnailBox, setThumbnailbox] = useState<HTMLDivElement | null>(null);
+
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      dispatch((state) => {
+        state.isViewerOpen = open;
+      });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     if (mainImageBox && thumbnailBox) {
@@ -35,14 +56,7 @@ export default function ImageViewer() {
   }, [thumbnailBox, mainImageBox]);
 
   return (
-    <Dialog.Root
-      open={isViewerOpen}
-      onOpenChange={(open) => {
-        dispatch((state) => {
-          state.isViewerOpen = open;
-        });
-      }}
-    >
+    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay
           className={classNames(
@@ -88,4 +102,4 @@ export default function ImageViewer() {
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
+});
