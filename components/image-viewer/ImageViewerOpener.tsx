@@ -12,6 +12,7 @@ type Props<TagName extends string> = {
 export default function ImageViewerOpener<TagName extends string>({
   imageUrl,
   className,
+  as,
   ...rest
 }: Props<TagName>) {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ export default function ImageViewerOpener<TagName extends string>({
 
   return (
     <Slot
+      as={as}
       className={classNames(className, "cursor-zoom-in")}
       onClick={onClick}
       {...rest}

@@ -1,17 +1,15 @@
 import React from "react";
 
 type PropsOf<TagName> = TagName extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[TagName]
+  ? React.ComponentPropsWithoutRef<TagName>
   : // this is for the case when the user didn't specify `as` prop.
     // because destructuring `{ as = "div" }` doesn't work.
-    JSX.IntrinsicElements["div"];
+    React.ComponentPropsWithoutRef<"div">;
 
-type Props<TagName extends string> = { as?: TagName } & Omit<
-  PropsOf<TagName>,
-  "ref"
->;
+type Props<TagName extends string> = { as?: TagName } & PropsOf<TagName>;
 
-export type SlotProps<TagName extends string> = Props<TagName>;
+export type SlotProps<TagName extends string> = Props<TagName> &
+  React.RefAttributes<HTMLElement>;
 
 function Slot<TagName extends string, E extends HTMLElement>(
   { as, ...props }: Props<TagName>,
