@@ -17,7 +17,7 @@ export const urlForImage = (source: SanityImageSource) =>
 export function getAspectRatioAfterCrop(image: RandomImage) {
   let aspect = image.aspectRatio;
 
-  const imageUrl = new URL(urlForImage(image.image).url());
+  const imageUrl = new URL(urlForImage(image.imageObject).url());
 
   if (imageUrl.searchParams.has("rect")) {
     const rect = imageUrl.searchParams.get("rect") as string;

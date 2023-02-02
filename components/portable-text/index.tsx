@@ -14,7 +14,7 @@ type Props = {
 
 const components: PortableTextComponents = {
   types: {
-    randomImage: Image,
+    imageRef: Image,
   },
   marks: {
     code: Code,

@@ -18,19 +18,19 @@ export default defineType({
           initialValue:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
         }),
-        defineField({
-          type: "string",
-          name: "loading",
-          title: "Image loading strategy",
-          initialValue: "lazy",
-          options: {
-            list: [
-              { title: "Eager", value: "eager" },
-              { title: "Lazy", value: "lazy" },
-            ],
-            layout: "radio",
-          },
-        }),
+        // defineField({
+        //   type: "string",
+        //   name: "loading",
+        //   title: "Image loading strategy",
+        //   initialValue: "lazy",
+        //   options: {
+        //     list: [
+        //       { title: "Eager", value: "eager" },
+        //       { title: "Lazy", value: "lazy" },
+        //     ],
+        //     layout: "radio",
+        //   },
+        // }),
       ],
       options: {
         hotspot: true,

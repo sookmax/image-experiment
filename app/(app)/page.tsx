@@ -5,9 +5,7 @@ import GithubIcon from "@/components/icons/GithubIcon";
 
 export default async function Home() {
   const article = await getArticle();
-  const images = article.content.filter(
-    (block) => block._type === "randomImage"
-  );
+  const images = article.content.filter((block) => block.url !== undefined);
   return (
     <Main images={images} className="max-w-4xl p-4 relative">
       <div className="flex justify-end">

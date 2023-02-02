@@ -52,7 +52,7 @@ export default function ThumbnailList() {
             >
               <Image
                 className="absolute inset-0 w-full h-full object-cover"
-                image={image.image}
+                image={image.imageObject}
                 alt={image.caption}
                 sizes="100px"
               />

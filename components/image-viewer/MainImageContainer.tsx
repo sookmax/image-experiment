@@ -7,11 +7,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import Image from "../Image";
 
 type Props = {
-  containerAspectRatio: number | null;
+  containerRect: { width: number; height: number } | null;
   children?: React.ReactNode;
 };
 
-export default function MainImage({ children, containerAspectRatio }: Props) {
+export default function MainImage({ children, containerRect }: Props) {
   const { images, currentImageIndex } = useAppState();
 
   const [imageContainer, setImageContainer] = useState<HTMLDivElement | null>();
@@ -30,29 +30,27 @@ export default function MainImage({ children, containerAspectRatio }: Props) {
 
   useEffect(() => {
     if (
-      containerAspectRatio &&
+      containerRect &&
       imageContainer &&
       captionContainer &&
       aspectRatioAfterCrop
     ) {
-      if (aspectRatioAfterCrop > containerAspectRatio) {
-        imageContainer.style.width = "100%";
-        imageContainer.style.height = "auto";
-      } else {
+      const imageHeight = containerRect.width / aspectRatioAfterCrop;
+      const maxHeight = containerRect.height - captionContainer.offsetHeight;
+
+      if (imageHeight > maxHeight) {
         imageContainer.style.width = "auto";
         imageContainer.style.height = "100%";
+      } else {
+        imageContainer.style.width = "100%";
+        imageContainer.style.height = "auto";
       }
 
       captionContainer.style.maxWidth = window
         .getComputedStyle(imageContainer)
         .getPropertyValue("width");
     }
-  }, [
-    imageContainer,
-    captionContainer,
-    aspectRatioAfterCrop,
-    containerAspectRatio,
-  ]);
+  }, [imageContainer, captionContainer, aspectRatioAfterCrop, containerRect]);
 
   return (
     <div className="w-full h-full flex flex-col justify-center items-center relative">
@@ -71,13 +69,13 @@ export default function MainImage({ children, containerAspectRatio }: Props) {
         <Image
           key={currentImage.url}
           className="absolute inset-0 w-full h-full"
-          image={currentImage.image}
+          image={currentImage.imageObject}
           alt={currentImage.caption}
         />
       </div>
       <div
         ref={setCaptionContainer}
-        className={classNames("px-4 sm:px-0 mt-4")}
+        className={classNames("px-4 sm:px-0 pt-4")}
       >
         <p className="line-clamp-5 sm:line-clamp-2">{currentImage.caption}</p>
       </div>

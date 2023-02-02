@@ -8,7 +8,7 @@ import { classNames } from "@/utils";
 export default function Image({
   value,
 }: PortableTextTypeComponentProps<RandomImage>) {
-  const { preview, loading, image, caption, url } = value;
+  const { preview, loading, imageObject, caption, url } = value;
 
   const aspectRatioAfterCrop = getAspectRatioAfterCrop(value);
 
@@ -28,7 +28,7 @@ export default function Image({
         >
           <_Image
             className="absolute inset-0"
-            image={image}
+            image={imageObject}
             alt={caption}
             loading={loading}
             sizes="(min-width: 896px) 896px, 100vw"

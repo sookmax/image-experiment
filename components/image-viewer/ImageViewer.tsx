@@ -27,9 +27,10 @@ const Memoized = React.memo(function ImageViewerImpl({
   dispatch,
 }: Props) {
   const [mainImageBox, setMainImageBox] = useState<HTMLDivElement | null>(null);
-  const [mainImageBoxRatio, setMainImageBoxRatio] = useState<number | null>(
-    null
-  );
+  const [mainImageBoxRect, setMainImageBoxRect] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [thumbnailBox, setThumbnailbox] = useState<HTMLDivElement | null>(null);
 
   const onOpenChange = useCallback(
@@ -48,10 +49,29 @@ const Memoized = React.memo(function ImageViewerImpl({
       }px)`;
 
       const computedStyle = window.getComputedStyle(mainImageBox);
-      setMainImageBoxRatio(
-        parseFloat(computedStyle.getPropertyValue("width").replace("px", "")) /
-          parseFloat(computedStyle.getPropertyValue("height").replace("px", ""))
-      );
+
+      setMainImageBoxRect({
+        width:
+          parseFloat(
+            computedStyle.getPropertyValue("width").replace("px", "")
+          ) -
+          parseFloat(
+            computedStyle.getPropertyValue("padding-left").replace("px", "")
+          ) -
+          parseFloat(
+            computedStyle.getPropertyValue("padding-right").replace("px", "")
+          ),
+        height:
+          parseFloat(
+            computedStyle.getPropertyValue("height").replace("px", "")
+          ) -
+          parseFloat(
+            computedStyle.getPropertyValue("padding-top").replace("px", "")
+          ) -
+          parseFloat(
+            computedStyle.getPropertyValue("padding-bottom").replace("px", "")
+          ),
+      });
     }
   }, [thumbnailBox, mainImageBox]);
 
@@ -80,8 +100,11 @@ const Memoized = React.memo(function ImageViewerImpl({
                 <CloseButton />
               </div>
               {/* flex-grow was causing too many problems so I adopted a different solution */}
-              <div ref={setMainImageBox} className="py-4">
-                <MainImageContainer containerAspectRatio={mainImageBoxRatio}>
+              <div
+                ref={setMainImageBox}
+                className="py-4 flex-grow-0 flex-shrink-0"
+              >
+                <MainImageContainer containerRect={mainImageBoxRect}>
                   <div className="absolute top-1/2 -translate-y-1/2 right-0 mx-2">
                     <NextImageButton />
                   </div>

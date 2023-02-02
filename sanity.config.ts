@@ -9,6 +9,7 @@ import {
 } from "@/lib/sanity.api";
 import randomImage from "./schemas/randomImage";
 import article from "./schemas/article";
+import imageRef from "./schemas/imageRef";
 
 if (!SANITY_PROJECT_ID || !SANITY_DATASET)
   throw "Missing SANITY_PROJECT_ID and/or SANITY_DATASET";
@@ -23,7 +24,7 @@ export default defineConfig({
   dataset: SANITY_DATASET,
 
   schema: {
-    types: [randomImage, article],
+    types: [randomImage, article, imageRef],
   },
 
   plugins: [deskTool(), visionTool(), unsplashImageAsset()],

@@ -5,12 +5,7 @@ import {
   SANITY_API_VERSION,
   SANITY_USE_CDN,
 } from "@/lib/sanity.api";
-import {
-  Article,
-  articleQuery,
-  RandomImage,
-  randomImageQuery,
-} from "./sanity.query";
+import { Article, articleQuery } from "./sanity.query";
 
 if (!SANITY_PROJECT_ID || !SANITY_DATASET || !SANITY_API_VERSION) {
   throw "Missing one or more of SANITY_PROJECT_ID, SANITY_DATASET, and SANITY_API_VERSION";
@@ -23,10 +18,10 @@ const client = createClient({
   useCdn: SANITY_USE_CDN,
 });
 
-export async function getAllRandomImages() {
-  const results = await client.fetch<RandomImage[]>(randomImageQuery);
-  return results;
-}
+// export async function getAllRandomImages() {
+//   const results = await client.fetch<RandomImage[]>(randomImageQuery);
+//   return results;
+// }
 
 export async function getArticle() {
   const results = await client.fetch<Article>(articleQuery);
