@@ -27,7 +27,7 @@ export default function Image({
           }}
         >
           <_Image
-            className="absolute inset-0"
+            className="absolute inset-0 w-full h-full"
             image={imageObject}
             alt={caption}
             loading={loading}
