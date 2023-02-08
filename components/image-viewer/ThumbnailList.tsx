@@ -1,34 +1,47 @@
+"use client";
 import { classNames } from "@/utils";
 import { useAppDispatch, useAppState } from "@/utils/store";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Image from "../Image";
 
 export default function ThumbnailList() {
   const { images, currentImageIndex } = useAppState();
   const dispatch = useAppDispatch();
 
-  const [ulElement, setUlElement] = useState<HTMLUListElement | null>(null);
+  // Inspired by:
+  // https://beta.reactjs.org/learn/manipulating-the-dom-with-refs#how-to-manage-a-list-of-refs-using-a-ref-callback
+  const itemsRef = useRef(new Map<number, HTMLLIElement>());
+
+  const setRef = useCallback(
+    (index: number) => (ref: HTMLLIElement | null) => {
+      if (ref) {
+        itemsRef.current.set(index, ref);
+      } else {
+        itemsRef.current.delete(index);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    if (ulElement) {
-      const thumbnailItem = ulElement.children[currentImageIndex];
+    const item = itemsRef.current.get(currentImageIndex);
 
-      if (thumbnailItem) {
-        thumbnailItem.scrollIntoView({
-          inline: "center",
-          behavior: "smooth",
-        });
-      }
+    if (item) {
+      item.scrollIntoView({
+        inline: "center",
+        behavior: "smooth",
+      });
     }
-  }, [currentImageIndex, ulElement]);
+  }, [currentImageIndex]);
 
   return (
-    <ul className="flex h-full space-x-2 overflow-auto" ref={setUlElement}>
+    <ul className="flex h-full space-x-2 overflow-auto">
       {images.map((image, index) => {
         const isActive = index === currentImageIndex;
         return (
           <li
             key={image.url}
+            ref={setRef(index)}
             className={classNames(
               "flex-shrink-0 w-24",
               "cursor-pointer",
